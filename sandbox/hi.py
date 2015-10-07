@@ -1,3 +1,2 @@
-#just a little test
-
-#we're getting a tad wild now
+#this is getting far too wild. I am using this text editor called "atom" and so far I am liking it somewhat.
+print("Hello World")
