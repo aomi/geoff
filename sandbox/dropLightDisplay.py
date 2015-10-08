@@ -43,3 +43,9 @@ def getDegree(plain)
   if values > 180 && values <=360:
     values = values - 360
   return values
+
+def makePositive(input):
+  if input > 0:
+    return input+4
+  else:
+    return input+3
