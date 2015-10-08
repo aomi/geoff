@@ -10,20 +10,6 @@ lasty = 0
 
 sense.clear()
 
-while(1)
-  #Dont know the function to grab the stuff
-  x = getDegree("x")
-  y = getDegree("y")
-  clamp(x,-89,89)
-  clamp(y,-89,89)
-  #maps x,y to nearest int between 0,8
-  x = int(x/11.25)
-  y = int(y/11.25)
-  sense.set_pixel(lastx,lasty,0,0,0)
-  sense.set_pixel(x,y,0,0,255)
-  lastx = x
-  lasty = y 
-  time.sleep(0.1)
 
 #restrains value between minn and maxn
 def clamp(n, minn, maxn):
@@ -35,17 +21,25 @@ def getDegree(plain)
   values = ("{pitch} {roll} {yaw}".format(**orientation))
   #splits them from string and determines if x or y, and lastly changes to float
   values = values.split()
-  if plain = "x":
+  if plain == "x":
     values = values[0]
-  elif plain ="y":
+  elif plain == "y":
     values = values[1]
   values = float(values)
-  if values > 180 && values <=360:
+  if values > 180:
     values = values - 360
   return values
 
-def makePositive(input):
-  if input > 0:
-    return input+4
-  else:
-    return input+3
+while(1)
+  #Dont know the function to grab the stuff
+  x = getDegree("x")
+  y = getDegree("y")
+  clamp(x,-89,89)
+  clamp(y,-89,89)
+  #maps x,y to nearest int between 0,8
+  x = abs(int(x/22.5+4)-7)
+  y = int(y/22.5+4)
+  sense.set_pixel(lastx,lasty,0,0,0)
+  sense.set_pixel(x,y,0,0,255)
+  lastx = x
+  lasty = y 
