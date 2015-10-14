@@ -19,8 +19,10 @@ class defineMotor(object):
         GPIO.output(self.pinEnable,GPIO.HIGH)
         
 motor1 = defineMotor(33,31,29)
+motor2 = defineMotor(40,38,36)
 
 motor1.forward()
+motor2.forward()
 
 time.sleep(5)
 
