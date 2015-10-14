@@ -9,7 +9,6 @@ class defineMotor(object):
         self.pinA = pinA
         self.pinB = pinB
         self.pinEnable = pinEnable
-        print('PinA:' + pinA + ' PinB:' + pinB + ' PinEnable:' + pinEnable)
         GPIO.setup(self.pinA,GPIO.OUT)
         GPIO.setup(self.pinB,GPIO.OUT)
         GPIO.setup(self.pinEnable,GPIO.OUT)
