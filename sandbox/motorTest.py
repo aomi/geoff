@@ -3,18 +3,28 @@ from time import sleep
  
 GPIO.setmode(GPIO.BOARD)
  
-Motor1A = 16
-Motor1B = 18
-Motor1E = 22
- 
-GPIO.setup(Motor1A,GPIO.OUT)
-GPIO.setup(Motor1B,GPIO.OUT)
-GPIO.setup(Motor1E,GPIO.OUT)
+ #determining what pins the motors are controlled by
+ #A and B control direction while E is enable
+motor1A = 33
+motor1B = 31
+motor1E = 29
+
+motor2A = 40
+motor2B = 38
+motor2E = 36
+
+#setting as outputs
+GPIO.setup(motor1A,GPIO.OUT)
+GPIO.setup(motor1B,GPIO.OUT)
+GPIO.setup(motor1E,GPIO.OUT)
+GPIO.setup(motor2A,GPIO.OUT)
+GPIO.setup(motor2B,GPIO.OUT)
+GPIO.setup(motor2E,GPIO.OUT)
  
 print "Turning motor on"
-GPIO.output(Motor1A,GPIO.HIGH)
-GPIO.output(Motor1B,GPIO.LOW)
-GPIO.output(Motor1E,GPIO.HIGH)
+GPIO.output(motor1A,GPIO.HIGH)
+GPIO.output(motor1B,GPIO.LOW)
+GPIO.output(motor1E,GPIO.HIGH)
  
 sleep(2)
  
