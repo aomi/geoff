@@ -18,12 +18,24 @@ class defineMotor(object):
         GPIO.output(self.pinB,GPIO.LOW)
         GPIO.output(self.pinEnable,GPIO.HIGH)
         
+    def reverse(self):
+        GPIO.output(self.pinA,GPIO.LOW)
+        GPIO.output(self.pinB,GPIO.HIGH)
+        GPIO.output(self.pinEnable,GPIO.HIGH)
+        
+    def stop(self):
+        GPIO.output(self.pinA,GPIO.LOW)
+        GPIO.output(self.pinB,GPIO.LOW)
+        GPIO.output(self.pinEnable,GPIO.LOW)
+        
 motor1 = defineMotor(33,31,29)
 motor2 = defineMotor(40,38,36)
 
 motor1.forward()
 motor2.forward()
-
 time.sleep(5)
-
-GPIO.cleanup()
+motor1.reverse()
+motor2.reverse()
+time.sleep(5)
+motor1.stop()
+motor2.stop()
