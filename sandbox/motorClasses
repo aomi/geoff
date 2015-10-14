@@ -1,11 +1,11 @@
-import PRi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 
 GPIO.setmode(GPIO.BOARD)
 
 class defineMotor(object):
 
-    def __init__(self, pinA, pinB, pinEnable)
+    def __init__(self, pinA, pinB, pinEnable):
         self.pinA = pinA
         self.pinB = pinB
         self.pinEnable = pinEnable
@@ -15,7 +15,7 @@ class defineMotor(object):
     
     def forward(self):
         GPIO.output(self.pinA,GPIO.HIGH)
-        GPIO.output(self.pinB,GPIO.HIGH)
+        GPIO.output(self.pinB,GPIO.LOW)
         GPIO.output(self.pinEnable,GPIO.HIGH)
         
 motor1 = defineMotor(33,31,29)
