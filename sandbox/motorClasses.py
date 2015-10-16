@@ -28,7 +28,7 @@ class defineMotor(object):
         GPIO.output(self.pinB,GPIO.LOW)
         GPIO.output(self.pinEnable,GPIO.LOW)
         
-motor1 = defineMotor(33,31,29)
+#motor1 = defineMotor(33,31,29)
 motor2 = defineMotor(40,38,36)
 
 #motor1.forward()
@@ -42,3 +42,4 @@ GPIO.output(36,GPIO.HIGH)
 time.sleep(5)
 #motor1.stop()
 motor2.stop()
+GPIO.cleanup()
