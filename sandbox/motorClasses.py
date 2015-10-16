@@ -3,6 +3,10 @@ import time
 
 GPIO.setmode(GPIO.BOARD)
 
+GPIO.setup(40,GPIO.OUT)
+GPIO.setup(38,GPIO.OUT)
+GPIO.setup(36,GPIO.OUT)
+
 class defineMotor(object):
 
     def __init__(self, pinA, pinB, pinEnable):
@@ -29,10 +33,10 @@ class defineMotor(object):
         GPIO.output(self.pinEnable,GPIO.LOW)
         
 #motor1 = defineMotor(33,31,29)
-motor2 = defineMotor(40,38,36)
+#motor2 = defineMotor(40,38,36)
 
 #motor1.forward()
-motor2.forward()
+#motor2.forward()
 time.sleep(5)
 GPIO.output(40,GPIO.LOW)
 GPIO.output(38,GPIO.HIGH)
