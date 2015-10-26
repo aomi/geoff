@@ -14,7 +14,7 @@ row = 1
 try:
     while True:
         temp = sensor.get_temperature()
-        time = datetime.time()
+        time = datetime.now()
         worksheet.write(row, 0, time)
         worksheet.write(row, 1, temp)
 
