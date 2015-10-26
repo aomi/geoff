@@ -2,7 +2,7 @@ import xlsxwriter
 from w1thermsensor import W1ThermSensor
 from datetime import datetime
 
-workbook = xlsxwriter.Workbook('test2.xlsx')
+workbook = xlsxwriter.Workbook('test3.xlsx')
 worksheet = workbook.add_worksheet("Temperature Data")
 bold = workbook.add_format({"bold":True})
 
