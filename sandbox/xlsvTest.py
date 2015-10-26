@@ -2,7 +2,7 @@ import xlsxwriter
 from w1thermsensor import W1ThermSensor
 from datetime import datetime
 
-workbook = xlsxwriter.Workbook('test.xlsx')
+workbook = xlsxwriter.Workbook('test2.xlsx')
 worksheet = workbook.add_worksheet("Temperature Data")
 bold = workbook.add_format({"bold":True})
 
@@ -15,7 +15,9 @@ try:
     while True:
         temp = sensor.get_temperature()
         time = datetime.time()
-        worksheet.write(row, 0, temp)
-worksheet.write('A1', 'Sup maaaaan')
+        worksheet.write(row, 0, time)
+        worksheet.write(row, 1, temp)
 
+except KeyboardInterrupt:
+    print("Finished")
 workbook.close()
