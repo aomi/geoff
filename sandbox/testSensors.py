@@ -1,4 +1,3 @@
-
 import xlsxwriter
 from w1thermsensor import W1ThermSensor
 from datetime import datetime
@@ -15,10 +14,10 @@ bme_sensor = BME280(mode=BME280_OSAMPLE_8)
 water_temp_sensor = W1ThermSensor()
 
 worksheet.write("A1", "Time", bold)
-worksheet.write("A2", "Air_Temp Values (C)", bold)
-worksheet.write("A3", "Pressure Values (hPa)", bold)
-worksheet.write("A4", "Humidity Values (%)", bold)
-worksheet.write("A5", "Water_Temp Values (C)", bold)
+worksheet.write(0, 1, "Air_Temp Values (C)")
+worksheet.write(0, 1, "Pressure Values (hPa)")
+worksheet.write(0, 1, "Humidity Values (%)")
+worksheet.write(0, 1, "Water_Temp Values (C)")
 row = 1
 
 try:
