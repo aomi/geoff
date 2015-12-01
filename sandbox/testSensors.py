@@ -1,19 +1,26 @@
-import xlsxwriter
+from openpyxl import Workbook
+from openpyxl.compat import range
 from w1thermsensor import W1ThermSensor
 from datetime import datetime
 from Adafruit_BME280 import *
 import time
 
 name = raw_input("Name of Document? ")
-
-workbook = xlsxwriter.Workbook(str(name)+'.xlsx')
-worksheet = workbook.add_worksheet("Temperature Data")
-bold = workbook.add_format({"bold":True})
+dest_filename = str(name) + '.xlsx'
+ws1 = wb.active
+ws1.title = "Sensor Data"
 
 bme_sensor = BME280(mode=BME280_OSAMPLE_8)
 water_temp_sensor = W1ThermSensor()
 
-worksheet.write("A1", "Time", bold)
+testing = range(12)
+print(testing)
+
+while(True):
+    print("cancel")
+    delay(80)
+###
+ws1['A1'] = "Time"
 worksheet.write(0, 1, "Air_Temp Values (C)")
 worksheet.write(0, 1, "Pressure Values (hPa)")
 worksheet.write(0, 1, "Humidity Values (%)")
