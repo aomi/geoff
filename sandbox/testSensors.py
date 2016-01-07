@@ -3,28 +3,89 @@ from openpyxl.compat import range
 from w1thermsensor import W1ThermSensor
 from datetime import datetime
 from Adafruit_BME280 import *
+import RPi.GPIO as GPIO
 import time
 
+#Intializing Workbook
 name = raw_input("Name of Document? ")
 dest_filename = str(name) + '.xlsx'
 ws1 = wb.active
 ws1.title = "Sensor Data"
 
+#changing GPIO Modes
+GPIO.setmode(GPIO.BCM)
+
+#Analog to digital converter reader
+def readadc(adcnum, clockpin, mosipin, misopin, cspin):
+        if ((adcnum > 7) or (adcnum < 0)):
+                return -1
+        GPIO.output(cspin, True)
+
+        GPIO.output(clockpin, False)  # start clock low
+        GPIO.output(cspin, False)     # bring CS low
+
+        commandout = adcnum
+        commandout |= 0x18  # start bit + single-ended bit
+        commandout <<= 3    # we only need to send 5 bits here
+        for i in range(5):
+                if (commandout & 0x80):
+                        GPIO.output(mosipin, True)
+                else:
+                        GPIO.output(mosipin, False)
+                commandout <<= 1
+                GPIO.output(clockpin, True)
+                GPIO.output(clockpin, False)
+
+        adcout = 0
+        # read in one empty bit, one null bit and 10 ADC bits
+        for i in range(12):
+                GPIO.output(clockpin, True)
+                GPIO.output(clockpin, False)
+                adcout <<= 1
+                if (GPIO.input(misopin)):
+                        adcout |= 0x1
+
+        GPIO.output(cspin, True)
+        
+        adcout >>= 1       # first bit is 'null' so drop it
+        return adcout
+
+#Initalizing Sensor/Pin Variables
 bme_sensor = BME280(mode=BME280_OSAMPLE_8)
 water_temp_sensor = W1ThermSensor()
+SPICLK = 18
+SPIMISO = 23
+SPIMOSI = 24
+SPICS = 25
+ph_sensor_pin = 0;
 
-testing = range(12)
-print(testing)
+#Setup GPIO Pins
+GPIO.setup(SPIMOSI, GPIO.OUT)
+GPIO.setup(SPIMISO, GPIO.IN)
+GPIO.setup(SPICLK, GPIO.OUT)
+GPIO.setup(SPICS, GPIO.OUT)
 
-while(True):
-    print("cancel")
-    delay(80)
-###
+
+#Variables for get_ph function
+last_read = 0       # this keeps track of the last ph value
+tolerance = 3       # to keep from being jittery we'll only change every 3 units
+
+def get_ph():
+        ph_value = readadc(ph_sensor_pin, SPICLK, SPIMOSI, SPIMISO, SPICS)
+        # how much has it changed since the last read?
+        ph_adjust = abs(ph_value - last_read)
+
+        if (ph_adjust > tolerance):
+                # save the ph reading for the next test
+                last_read = ph_value
+                return 18.7-3*ph_value/200
+
 ws1['A1'] = "Time"
-worksheet.write(0, 1, "Air_Temp Values (C)")
-worksheet.write(0, 1, "Pressure Values (hPa)")
-worksheet.write(0, 1, "Humidity Values (%)")
-worksheet.write(0, 1, "Water_Temp Values (C)")
+worksheet.write(0, 1, "Air_Temp (C)")
+worksheet.write(0, 2, "Pressure (hPa)")
+worksheet.write(0, 3, "Humidity (%)")
+worksheet.write(0, 4, "Water_Temp (C)")
+worksheet.write(0, 5, "Water pH (ph)")
 row = 1
 
 try:
@@ -35,13 +96,15 @@ try:
         hectopascals = pascals / 100
         humidity     = bme_sensor.read_humidity()
         water_temp   = water_temp_sensor.get_temperature()
-        time = datetime.now()
+        ph           = get_ph()
+        time         = datetime.now()
         
         worksheet.write(row, 0, time)
         worksheet.write(row, 1, air_temp)
         worksheet.write(row, 2, hectopascals)
         worksheet.write(row, 3, humidity)
         worksheet.write(row, 4, water_temp)
+        worksheet.write(row, 5, ph)
         row += 1
         
         print ('Timestamp = {0:0.3f}'.format(bme_sensor.t_fine))
@@ -49,6 +112,7 @@ try:
         print ('Pressure  = {0:0.2f} hPa'.format(hectopascals))
         print ('Humidity  = {0:0.2f} %'.format(humidity))
         print ("Water_Temp = " + str(water_temp) + " deg C")
+        print ("pH = " + str(ph) + "pH")
         print("-------------------------------------------------")
         time.sleep(1)
         
