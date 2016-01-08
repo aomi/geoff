@@ -7,6 +7,7 @@ import RPi.GPIO as GPIO
 import time
 
 #Intializing Workbook
+wb = Workbook()
 name = raw_input("Name of Document? ")
 dest_filename = str(name) + '.xlsx'
 ws1 = wb.active
@@ -70,10 +71,10 @@ GPIO.setup(SPICS, GPIO.OUT)
 last_read = 0       # this keeps track of the last ph value
 tolerance = 3       # to keep from being jittery we'll only change every 3 units
 
-def get_ph():
+def get_ph(last_value):
         ph_value = readadc(ph_sensor_pin, SPICLK, SPIMOSI, SPIMISO, SPICS)
         # how much has it changed since the last read?
-        ph_adjust = abs(ph_value - last_read)
+        ph_adjust = abs(ph_value - last_value)
 
         if (ph_adjust > tolerance):
                 # save the ph reading for the next test
@@ -81,11 +82,11 @@ def get_ph():
                 return 18.7-3*ph_value/200
 
 ws1['A1'] = "Time"
-worksheet.write(0, 1, "Air_Temp (C)")
-worksheet.write(0, 2, "Pressure (hPa)")
-worksheet.write(0, 3, "Humidity (%)")
-worksheet.write(0, 4, "Water_Temp (C)")
-worksheet.write(0, 5, "Water pH (ph)")
+ws1['B1'] = "Air_Temp (C)"
+ws1['C1'] = "Pressure (hPa)"
+ws1['D1'] = "Humidity (%)"
+ws1['E1'] = "Water_Temp (C)"
+ws1['F1'] = "Water pH (ph)"
 row = 1
 
 try:
@@ -96,15 +97,15 @@ try:
         hectopascals = pascals / 100
         humidity     = bme_sensor.read_humidity()
         water_temp   = water_temp_sensor.get_temperature()
-        ph           = get_ph()
+        ph           = get_ph(last_read)
         time         = datetime.now()
         
-        worksheet.write(row, 0, time)
-        worksheet.write(row, 1, air_temp)
-        worksheet.write(row, 2, hectopascals)
-        worksheet.write(row, 3, humidity)
-        worksheet.write(row, 4, water_temp)
-        worksheet.write(row, 5, ph)
+        ws1['A'+str(row)] = str(time)
+        ws1['B'+str(row)] = str(air_temp)
+        ws1['C'+str(row)] = str(hectopascals)
+        ws1['D'+str(row)] = str(humidity)
+        ws1['E'+str(row)] = str(water_temp)
+        ws1['F'+str(row)] = str(ph)
         row += 1
         
         print ('Timestamp = {0:0.3f}'.format(bme_sensor.t_fine))
