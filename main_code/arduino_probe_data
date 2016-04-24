@@ -1,0 +1,75 @@
+#include <Wire.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+#define SLAVE_ADDRESS 0x04
+#define ONE_WIRE_BUS 2
+
+// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
+OneWire oneWire(ONE_WIRE_BUS);
+// Pass our oneWire reference to Dallas Temperature. 
+DallasTemperature sensors(&oneWire);
+
+int protocol = 0;
+int output = 0;
+int phValue;
+const int phSensor = 0;
+
+void setup() {
+  pinMode(13, OUTPUT);
+  pinMode(phSensor, INPUT);
+  Serial.begin(9600); // start serial for output
+  //start up temperature library
+  
+  // initialize i2c as slave
+  Wire.begin(SLAVE_ADDRESS);
+
+  // define callbacks for i2c communication
+  Wire.onReceive(receiveData);
+  Wire.onRequest(sendData);
+  sensors.begin();
+
+  Serial.println("Ready!");
+}
+
+void loop() {
+  delay(100);
+}
+
+// callback for received data
+void receiveData(int byteCount){
+
+  while(Wire.available()) {
+      protocol = Wire.read();
+      Serial.println(protocol);
+      
+      // take inital ph value and output iterations of 256
+      if (protocol == 1){
+          phValue = analogRead(phSensor);
+          Serial.print("ph Value is ");
+          Serial.print(phValue);
+          output = int(phValue/256);
+          Serial.print(" with the iterations of 255 being  ");
+          Serial.println(output);
+      }
+      
+      // output the remainder of the ph value
+      if (protocol == 2){
+          Serial.print("Remainder is :");
+          Serial.println(phValue);
+          Serial.println(phValue%256);
+          output = phValue%256;
+      }
+      
+      //request temperature value
+      if (protocol == 3){
+          sensors.requestTemperatures();
+          output = sensors.getTempCByIndex(0);
+      }
+  }
+}
+
+// callback for sending data
+void sendData(){
+  Wire.write(output);
+}
