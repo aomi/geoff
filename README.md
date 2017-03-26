@@ -35,7 +35,7 @@ The Raspberry Pi emitted a wi-fi access point which was connected to via a compu
 This program was written to be executed on the Raspberry Pi 2 with a [Adafruit Motor HAT](https://www.adafruit.com/product/2348). This program also assumes that a way to SSH into the system has been configured. For our testing, a WiFi hotspot was made on the Raspberry Pi. This was put together for a prototype and the code and setup reflects this. 
 
 - Clone onto Raspberry Pi
-- Install requirements via Pip.
+- Install requirements via pip.
 ```
 pip install -r requirements.txt
 ```
