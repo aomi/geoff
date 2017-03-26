@@ -1,0 +1,11 @@
+To Run Application Requires
+
+python-dev, python-smbus, redis
+
+Required Python Libraries
+Adafruit GPIO, MotorHAT, BME280 Libraries provided from Adafruit
+celery
+flask
+flask-socketio
+peewee
+redis
